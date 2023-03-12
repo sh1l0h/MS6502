@@ -1,3 +1,19 @@
+/* Copyright (C) 2023, Mirian Shilakadze 
+ 
+   This file is part of MS6502.
+ 
+   MS6502 is free software: you can redistribute it and/or modify it
+   under the MS6502 terms of the GNU General Public License as published
+   by the Free Software Foundation, either version 3 of the License, or (at your option)
+   any later version.
+ 
+   MS6502 is distributed in the hope that it will be useful, but WITHOUT ANY 
+   WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+   FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License along
+   with MS6502. If not, see <https://www.gnu.org/licenses/>. */
+
 #ifndef MS_6502_H
 #define MS_6502_H
 
@@ -25,14 +41,14 @@ typedef struct MS6502 {
 	u8  IR; // Instruction register
 
 	i8  cycle;
-	i8  op1;
-	i16 op2;
+	u8  op1;
+	u16 op2;
 
 } MS6502;
 
-MS6502 *6502_create(u8 (*read)(u16), u8 (*write)(u16, u8));
+MS6502 *MS6502_create(u8 (*read)(u16 address), u8 (*write)(u16 address, u8 data));
 
-void 6502_reset(MS6502 *mp);
-void 6502_clock(MS6502 *mp);
+void MS6502_reset(MS6502 *mp);
+void MS6502_clock(MS6502 *mp);
 
 #endif
