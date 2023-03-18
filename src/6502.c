@@ -44,9 +44,14 @@ static inline void fetch(MS6502 *mp)
 	mp->IR = mp->read(mp->PC++);
 }
 
+static void set_zero(MS6502 *mp)
+{
+	if(mp->op1 == 0) mp->SR |= 1 << Z;
+}
+
 static void execute_opcode(MS6502 *mp)
 {
-	if(mp->IR & 3 == 1){ // group one
+	if((mp->IR & 3) == 1){ // group one
 
 		switch(mp->IR & 0xE0 >> 5){
 
@@ -57,6 +62,7 @@ static void execute_opcode(MS6502 *mp)
 		case 4: // STA
 		case 5: // LDA
 			mp->AC = mp->op1;
+			set_zero(mp);
 			break;
 		case 6: // CMP
 		case 7: // SBC
@@ -69,7 +75,7 @@ static void execute_opcode(MS6502 *mp)
 static void addressing_mode(MS6502 *mp)
 {
 	if((mp->IR & 3) == 1){ // group one
-		switch(mp->IR & 0x1C >> 2){
+		switch((mp->IR & 0x1C) >> 2){
 		case 1: // Zero page
 
 			switch(mp->cycle){

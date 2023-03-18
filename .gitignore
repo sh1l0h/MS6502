@@ -1,5 +1,5 @@
 # Emacs temp files
 *~
 
-# Directory with tests
-tests/
+# Directory with test binaries
+tests/bin/
