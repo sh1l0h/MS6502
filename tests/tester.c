@@ -23,13 +23,13 @@ u8 ram[0x10000];
 
 u8 read(u16 address)
 {
-    return ram[address];
+	return ram[address];
 }
 
 u8 write(u16 address, u8 data)
 {
 	ram[address] = data;
-    return 0;
+	return 0;
 }
 
 int main(i32 argc, char **argv)
@@ -39,18 +39,18 @@ int main(i32 argc, char **argv)
 		return 1;
 	}
 
-    FILE *f = fopen(argv[1], "r");
+	FILE *f = fopen(argv[1], "r");
 	if(!f){
 		fprintf(stderr, "%s: error: %s: no such file or directory\n", argv[0], argv[1]);
 		return 1;
 	}
 
-    u32 error_count = 0;
+	u32 error_count = 0;
 
 	MS6502 *mp = MS6502_create(read, write);
 
-    char curr_file_name[128];
-    curr_file_name[0] = '\0';
+	char curr_file_name[128];
+	curr_file_name[0] = '\0';
 	u64 size = 0;
 	char *line = NULL;
 
@@ -61,13 +61,13 @@ int main(i32 argc, char **argv)
 
 		char *temp = strtok(line, ":"); 
 
-        u8 preserve_state = *temp == '+';
+		u8 preserve_state = *temp == '+';
 
 		u64 clock = (u64)strtol(temp, NULL, 0) + (preserve_state ? 7 : 0);
 
 		temp = strtok(temp, ":");
 		if(strcmp(temp, "_")){
-            strcpy(curr_file_name, temp);
+			strcpy(curr_file_name, temp);
 			FILE *input_file = fopen(curr_file_name, "r");
 			if(!input_file) {
 				fprintf(stderr, "%s:%u: error: %s: no such file or directory\n", argv[1], nline, curr_file_name);
@@ -76,10 +76,10 @@ int main(i32 argc, char **argv)
 			fread((void *) ram, 1, 0x10000, input_file);
 			fclose(input_file);
 		}
-        else if(curr_file_name[0] == '\0'){
-            fprintf(stderr, "%s: RAM is empty\n", argv[0]);
-            continue;
-        }
+		else if(curr_file_name[0] == '\0'){
+			fprintf(stderr, "%s: RAM is empty\n", argv[0]);
+			continue;
+		}
 
 		/* 
 		 * Indexes 0-6 correspond to the registers as listed below.
@@ -165,8 +165,8 @@ int main(i32 argc, char **argv)
 			
 		}
 
-        if(!preserve_state)
-            MS6502_reset(mp);
+		if(!preserve_state)
+			MS6502_reset(mp);
 
 		for(u32 i = 0; i < clock; i++) MS6502_clock(mp);
 
